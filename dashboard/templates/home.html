@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Utilitários</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Roboto', sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border-radius: 15px;
+            border: none;
+            background-color: #fff;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: scale(1.02);
+        }
+        .card-title {
+            font-size: 1.5em;
+            color: #333;
+        }
+        .card-link {
+            text-decoration: none;
+            color: #fff;
+            background-color: #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+        .card-link:hover {
+            background-color: #444;
+            color: #fff;
+        }
+        .text-center {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">Painel de Utilitários</h1>
+        <div class="row">
+            <!-- Card de Links Práticos -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Links Práticos</h5>
+                        <p class="card-text">Acesse rapidamente os sistemas internos e utilitários essenciais.</p>
+                        <a href="{% url 'links_list' %}" class="card-link">Acessar Links</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card de Gerador de Senha do PDV -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Gerador de Senha do PDV</h5>
+                        <p class="card-text">Gere e copie as senhas diárias para os PDVs de forma rápida.</p>
+                        <a href="{% url 'password_view' %}" class="card-link">Acessar Gerador de Senhas</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card de Gerador de Código de Barras -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Gerador de Código de Barras</h5>
+                        <p class="card-text">Gere códigos de barras personalizados para impressão.</p>
+                        <a href="{% url 'generate_barcode' %}" class="card-link">Acessar Gerador de Códigos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
