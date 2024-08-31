@@ -11,7 +11,14 @@ def generate_barcode(request):
             try:
                 # Obtendo a classe do barcode
                 code128 = barcode.get_barcode_class('code128')
-                code = code128(number, writer=ImageWriter())
+                
+                # Configurações ajustadas do ImageWriter
+                writer = ImageWriter()
+                writer.module_width = 0.4  # Largura ajustada dos módulos
+                writer.module_height = 20  # Altura ajustada dos módulos
+                writer.quiet_zone = 6      # Área silenciosa padrão ao redor do código de barras
+                
+                code = code128(number, writer=writer)
                 
                 # Gerando o código de barras e salvando na memória
                 buffer = BytesIO()
