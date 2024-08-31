@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-y=p9be#5oq1c0gkmu6)l8vud$v_e0#i)y5@kxkuvurtm+n4o@b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,6 +42,10 @@ INSTALLED_APPS = [
     'dashboard',
     'barcode_generator',
     'sitef_errors'
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://painelcpd.onrender.com',
 ]
 
 MIDDLEWARE = [
