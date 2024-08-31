@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'pdv_senhas',
     'dashboard',
     'barcode_generator',
+    'sitef_errors'
 ]
 
 MIDDLEWARE = [
