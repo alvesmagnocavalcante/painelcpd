@@ -70,6 +70,13 @@
             color: #fff; /* Branco */
             background-color: #4caf50; /* Verde */
         }
+        /* Responsividade para tabelas */
+        .table-responsive {
+            margin-top: 20px;
+        }
+        .btn-custom-sm {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -77,48 +84,50 @@
         <a href="{% url 'registro_balanca' %}" class="btn btn-back"><i class="fas fa-arrow-left"></i> Voltar</a>
         <h1>Lista de Balanças</h1>
         <div class="card shadow p-4">
-            <a href="{% url 'exportar_balanca_xlsx' %}" class="btn btn-custom mb-4">Exportar para Excel</a>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Número da Balança</th>
-                        <th>Peso</th>
-                        <th>Setor</th>
-                        <th>Data de Registro</th>
-                        <th>Status</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for registro in registros %}
+            <a href="{% url 'exportar_balanca_xlsx' %}" class="btn btn-custom btn-custom-sm mb-4">Exportar para Excel</a>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
                         <tr>
-                            <td>{{ registro.numero_balanca }}</td>
-                            <td class="{% if registro.peso < 19995 %}peso-fora{% elif registro.peso == 19995 %}peso-aceitavel{% else %}peso-dentro{% endif %}">
-                                {{ registro.peso }}
-                            </td>
-                            <td>{{ registro.setor }}</td>
-                            <td>{{ registro.data_registro }}</td>
-                            <td>
-                                {% if registro.peso < 19995 %}
-                                    Fora da margem
-                                {% elif registro.peso == 19995 %}
-                                    Aceitável
-                                {% else %}
-                                    Dentro da margem
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="{% url 'editar_balanca' registro.pk %}" class="btn btn-custom btn-sm">Editar</a>
-                                <a href="{% url 'excluir_balanca' registro.pk %}" class="btn btn-custom btn-sm">Excluir</a>
-                            </td>
+                            <th>Número da Balança</th>
+                            <th>Peso</th>
+                            <th>Setor</th>
+                            <th>Data de Registro</th>
+                            <th>Status</th>
+                            <th>Ações</th>
                         </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="6" class="text-center">Nenhum registro encontrado.</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for registro in registros %}
+                            <tr>
+                                <td>{{ registro.numero_balanca }}</td>
+                                <td class="{% if registro.peso < 19995 %}peso-fora{% elif registro.peso == 19995 %}peso-aceitavel{% else %}peso-dentro{% endif %}">
+                                    {{ registro.peso }}
+                                </td>
+                                <td>{{ registro.setor }}</td>
+                                <td>{{ registro.data_registro }}</td>
+                                <td>
+                                    {% if registro.peso < 19995 %}
+                                        Fora da margem
+                                    {% elif registro.peso == 19995 %}
+                                        Aceitável
+                                    {% else %}
+                                        Dentro da margem
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'editar_balanca' registro.pk %}" class="btn btn-custom btn-sm">Editar</a>
+                                    <a href="{% url 'excluir_balanca' registro.pk %}" class="btn btn-custom btn-sm">Excluir</a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">Nenhum registro encontrado.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
