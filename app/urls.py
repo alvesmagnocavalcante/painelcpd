@@ -8,5 +8,6 @@ urlpatterns = [
     path('pdv-senhas/', include('pdv_senhas.urls')),  # App Senhas de PDV
     path('barcode/', include('barcode_generator.urls')),  # App Gerador de Código de Barras
     path('sitef-errors/', include('sitef_errors.urls')),  # App de Erros do Sitef
+    path('balanca/', include('balanca.urls')),
 ]
 
