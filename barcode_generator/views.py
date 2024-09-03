@@ -15,7 +15,7 @@ def generate_barcode(request):
                 # Configurações ajustadas do ImageWriter
                 writer = ImageWriter()
                 writer.module_width = 1.3  # Largura ajustada dos módulos
-                writer.module_height = 5  # Altura ajustada dos módulos
+                writer.module_height = 10  # Altura ajustada dos módulos
                 writer.quiet_zone = 6      # Área silenciosa padrão ao redor do código de barras
                 
                 code = code128(number, writer=writer)
