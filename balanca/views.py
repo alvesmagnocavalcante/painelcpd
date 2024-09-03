@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from openpyxl import Workbook
 from .models import Balanca
+from datetime import datetime
 
 def registro_balanca(request):
     if request.method == 'POST':
@@ -20,7 +21,15 @@ def lista_balanca(request):
     return render(request, 'lista_balanca.html', {'registros': registros})
 
 def exportar_balanca_xlsx(request):
-    registros = Balanca.objects.all()
+    data_inicial = request.GET.get('data_inicial')
+    data_final = request.GET.get('data_final')
+
+    if data_inicial and data_final:
+        data_inicial = datetime.strptime(data_inicial, '%Y-%m-%d')
+        data_final = datetime.strptime(data_final, '%Y-%m-%d')
+        registros = Balanca.objects.filter(data_registro__range=[data_inicial, data_final])
+    else:
+        registros = Balanca.objects.all()
     
     wb = Workbook()
     ws = wb.active
@@ -36,7 +45,7 @@ def exportar_balanca_xlsx(request):
         else:
             status = "Dentro da margem"
         
-        data_registro = registro.data_registro.replace(tzinfo=None) if registro.data_registro else None
+        data_registro = registro.data_registro.strftime('%d/%m/%Y') if registro.data_registro else None
         ws.append([registro.numero_balanca, registro.peso, registro.setor, data_registro, status])
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
