@@ -17,7 +17,7 @@ def generate_barcode(request):
                 writer = ImageWriter()
                 writer.dpi = 300
                 writer.module_width = 0.2
-                writer.module_height = 15
+                writer.module_height = 10
                 writer.quiet_zone = 2
                 
                 code = Code128(number, writer=writer)
