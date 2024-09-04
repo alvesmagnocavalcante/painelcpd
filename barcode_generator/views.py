@@ -14,10 +14,10 @@ def generate_barcode(request):
                 
                 # Configurações ajustadas do ImageWriter
                 writer = ImageWriter()
-                writer.dpi = 150  # Resolução de imagem
-                writer.module_width = 0.20  # Largura mais reduzida dos módulos
-                writer.module_height = 8  # Altura mais reduzida dos módulos
-                writer.quiet_zone = 1  # Área silenciosa ajustada
+                writer.dpi = 150  # Resolução de imagem maior para maior clareza
+                writer.module_width = 0.3  # Largura dos módulos aumentada para melhorar a leitura
+                writer.module_height = 15  # Altura dos módulos aumentada para maior visibilidade
+                writer.quiet_zone = 6  # Área silenciosa aumentada para melhor leitura
                 writer.font_size = 0  # Tamanho da fonte desativado para não mostrar texto
                 
                 # Gerando o código de barras
