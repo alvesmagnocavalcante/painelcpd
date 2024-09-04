@@ -7,21 +7,20 @@ from django.http import HttpResponse
 def generate_barcode(request):
     if request.method == 'POST':
         number = request.POST.get('number')
-        
-        if number and len(number) == 12:
+        if number:
             try:
-                # Obtendo a classe EAN13 do barcode
-                ean_class = barcode.get_barcode_class('ean13')
+                # Obtendo a classe Code128 do barcode
+                code128_class = barcode.get_barcode_class('code128')
                 
                 # Configurações ajustadas do ImageWriter
                 writer = ImageWriter()
                 writer.dpi = 300  # Resolução de imagem
-                writer.module_width = 0.2  # Largura ajustada dos módulos
-                writer.module_height = 15  # Altura ajustada dos módulos
-                writer.quiet_zone = 2  # Área silenciosa ajustada
+                writer.module_width = 0.2  # Largura ajustada dos módulos para reduzir o tamanho
+                writer.module_height = 10  # Altura ajustada dos módulos para reduzir o tamanho
+                writer.quiet_zone = 1  # Área silenciosa ajustada para reduzir o tamanho
                 
                 # Gerando o código de barras
-                code = ean_class(number, writer=writer)
+                code = code128_class(number, writer=writer)
                 
                 # Salvando o código de barras na memória
                 buffer = BytesIO()
@@ -34,6 +33,4 @@ def generate_barcode(request):
                 return response
             except Exception as e:
                 return HttpResponse(f"Erro ao gerar o código de barras: {e}")
-        else:
-            return HttpResponse("Número inválido! Certifique-se de que ele possui 12 dígitos.")
     return render(request, 'barcode_generator.html')
