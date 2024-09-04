@@ -7,24 +7,25 @@ from django.http import HttpResponse
 def generate_barcode(request):
     if request.method == 'POST':
         number = request.POST.get('number')
-        if number:
+        
+        if number and len(number) == 12:
             try:
-                # Obtendo a classe do barcode
-                code128 = barcode.get_barcode_class('code128')
+                # Obtendo a classe EAN13 do barcode
+                ean_class = barcode.get_barcode_class('ean13')
                 
                 # Configurações ajustadas do ImageWriter
-                # Usando a classe Code128 diretamente
                 writer = ImageWriter()
-                writer.dpi = 300
-                writer.module_width = 0.2
-                writer.module_height = 10
-                writer.quiet_zone = 2
+                writer.dpi = 300  # Resolução de imagem
+                writer.module_width = 0.2  # Largura ajustada dos módulos
+                writer.module_height = 15  # Altura ajustada dos módulos
+                writer.quiet_zone = 2  # Área silenciosa ajustada
                 
-                code = Code128(number, writer=writer)
+                # Gerando o código de barras
+                code = ean_class(number, writer=writer)
                 
-                # Gerando o código de barras e salvando na memória
+                # Salvando o código de barras na memória
                 buffer = BytesIO()
-                code.write(buffer)
+                code.write(buffer, options={"write_text": False})  # Desativar o texto por padrão
                 buffer.seek(0)
                 
                 # Preparando a resposta HTTP com o código de barras
@@ -33,4 +34,6 @@ def generate_barcode(request):
                 return response
             except Exception as e:
                 return HttpResponse(f"Erro ao gerar o código de barras: {e}")
+        else:
+            return HttpResponse("Número inválido! Certifique-se de que ele possui 12 dígitos.")
     return render(request, 'barcode_generator.html')
