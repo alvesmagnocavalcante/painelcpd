@@ -15,10 +15,10 @@ def generate_barcode(request):
                 # Configurações ajustadas do ImageWriter
                 writer = ImageWriter()
                 writer.dpi = 300  # Resolução de imagem
-                writer.module_width = 0.1  # Largura mínima dos módulos
-                writer.module_height = 5  # Altura mínima dos módulos
-                writer.quiet_zone = 1  # Área silenciosa mínima
-                writer.font_size = 0  # Tamanho da fonte desativado
+                writer.module_width = 0.15  # Largura mais reduzida dos módulos
+                writer.module_height = 8  # Altura mais reduzida dos módulos
+                writer.quiet_zone = 1  # Área silenciosa ajustada
+                writer.font_size = 0  # Tamanho da fonte desativado para não mostrar texto
                 
                 # Gerando o código de barras
                 code = code128_class(number, writer=writer)
