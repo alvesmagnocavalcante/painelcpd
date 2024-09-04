@@ -14,17 +14,18 @@ def generate_barcode(request):
                 
                 # Configurações ajustadas do ImageWriter
                 writer = ImageWriter()
-                writer.dpi = 100  # Resolução de imagem
-                writer.module_width = 0.2  # Largura ajustada dos módulos para reduzir o tamanho
-                writer.module_height = 4  # Altura ajustada dos módulos para reduzir o tamanho
-                writer.quiet_zone = 1  # Área silenciosa ajustada para reduzir o tamanho
+                writer.dpi = 300  # Resolução de imagem
+                writer.module_width = 0.1  # Largura mínima dos módulos
+                writer.module_height = 5  # Altura mínima dos módulos
+                writer.quiet_zone = 1  # Área silenciosa mínima
+                writer.font_size = 0  # Tamanho da fonte desativado
                 
                 # Gerando o código de barras
                 code = code128_class(number, writer=writer)
                 
                 # Salvando o código de barras na memória
                 buffer = BytesIO()
-                code.write(buffer, options={"write_text": False})  # Desativar o texto por padrão
+                code.write(buffer)
                 buffer.seek(0)
                 
                 # Preparando a resposta HTTP com o código de barras
