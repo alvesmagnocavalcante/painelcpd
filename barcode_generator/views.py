@@ -7,10 +7,13 @@ from django.http import HttpResponse
 def generate_barcode(request):
     if request.method == 'POST':
         number = request.POST.get('number')
-        if number:
+        if number and len(number) == 6:  # Verifica se o número possui 6 dígitos
             try:
-                # Obtendo a classe Code128 do barcode
-                code128_class = barcode.get_barcode_class('code128')
+                # Preenchendo com zeros à esquerda para totalizar 12 dígitos
+                full_number = number.zfill(12)
+                
+                # Obtendo a classe EAN13 do barcode
+                ean13_class = barcode.get_barcode_class('ean13')
                 
                 # Configurações ajustadas do ImageWriter
                 writer = ImageWriter()
@@ -20,8 +23,8 @@ def generate_barcode(request):
                 writer.quiet_zone = 6  # Área silenciosa aumentada para melhor leitura
                 writer.font_size = 0  # Tamanho da fonte desativado para não mostrar texto
                 
-                # Gerando o código de barras
-                code = code128_class(number, writer=writer)
+                # Gerando o código de barras EAN-13 com os números preenchidos
+                code = ean13_class(full_number, writer=writer)
                 
                 # Salvando o código de barras na memória
                 buffer = BytesIO()
@@ -34,4 +37,6 @@ def generate_barcode(request):
                 return response
             except Exception as e:
                 return HttpResponse(f"Erro ao gerar o código de barras: {e}")
+        else:
+            return HttpResponse("O código deve ter exatamente 6 dígitos.")
     return render(request, 'barcode_generator.html')
