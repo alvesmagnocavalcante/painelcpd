@@ -28,7 +28,7 @@ def generate_barcode(request):
                 
                 # Salvando o código de barras na memória
                 buffer = BytesIO()
-                code.write(buffer)
+                code.write(buffer, text='')  # Não exibir texto no código de barras
                 buffer.seek(0)
                 
                 # Preparando a resposta HTTP com o código de barras
