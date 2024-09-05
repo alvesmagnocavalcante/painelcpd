@@ -24,7 +24,7 @@ def generate_barcode(request):
                 writer.font_size = 0  # Tamanho da fonte desativado para não mostrar texto
                 
                 # Gerando o código de barras EAN-13 com os números preenchidos
-                # Usando apenas os 12 dígitos formados pelo preenchimento com zeros à esquerda
+                # O último dígito será gerado automaticamente como o dígito de controle
                 code = ean13_class(full_number, writer=writer)
                 
                 # Salvando o código de barras na memória
