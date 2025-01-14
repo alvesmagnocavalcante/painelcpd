@@ -3,6 +3,9 @@ import barcode
 from barcode.writer import ImageWriter
 from io import BytesIO
 from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.utils import ImageReader  # Importação corrigida
 
 def generate_barcode(request):
     if request.method == 'POST':
@@ -12,30 +15,46 @@ def generate_barcode(request):
                 # Preenchendo com zeros à esquerda para totalizar 12 dígitos
                 full_number = number.zfill(12)
                 
-                # Obtendo a classe EAN13 do barcode
+                # Configurações do gerador de código de barras
                 ean13_class = barcode.get_barcode_class('ean13')
-                
-                # Configurações ajustadas do ImageWriter
                 writer = ImageWriter()
-                writer.dpi = 250  # Resolução de imagem maior para maior clareza
-                writer.module_width = 0.3  # Largura dos módulos aumentada para melhorar a leitura
-                writer.module_height = 15  # Altura dos módulos aumentada para maior visibilidade
-                writer.quiet_zone = 6  # Área silenciosa aumentada para melhor leitura
-                writer.font_size = 0  # Tamanho da fonte desativado para não mostrar texto
+                writer.dpi = 250
+                writer.module_width = 0.3
+                writer.module_height = 15
+                writer.quiet_zone = 6
+                writer.font_size = 0
                 
-                # Gerando o código de barras EAN-13 com os números preenchidos
-                # O último dígito será gerado automaticamente como o dígito de controle
-                code = ean13_class(full_number, writer=writer)
+                # Gerar os códigos de barras e salvar em uma lista de imagens
+                images = []
+                for _ in range(5):
+                    buffer = BytesIO()
+                    code = ean13_class(full_number, writer=writer)
+                    code.write(buffer, text='')
+                    buffer.seek(0)
+                    images.append(ImageReader(buffer))  # Converte para ImageReader diretamente
+
+                # Gerar o PDF com os códigos de barras
+                pdf_buffer = BytesIO()
+                pdf_canvas = canvas.Canvas(pdf_buffer, pagesize=A4)
+                width, height = A4
+                x, y = 50, height - 100  # Posição inicial do primeiro código
                 
-                # Salvando o código de barras na memória
-                buffer = BytesIO()
-                code.write(buffer, text='')  # Não exibir texto no código de barras
-                buffer.seek(0)
+                for img in images:
+                    # Inserir a imagem no PDF
+                    pdf_canvas.drawImage(img, x, y, width=200, height=50)
+                    y -= 70  # Atualizar a posição para o próximo código
+                    if y < 50:  # Nova página, se necessário
+                        pdf_canvas.showPage()
+                        y = height - 100
                 
-                # Preparando a resposta HTTP com o código de barras
-                response = HttpResponse(buffer.getvalue(), content_type='image/png')
-                response['Content-Disposition'] = 'inline; filename="barcode.png"'
+                pdf_canvas.save()
+                pdf_buffer.seek(0)
+                
+                # Retornar o PDF como resposta HTTP para exibição
+                response = HttpResponse(pdf_buffer, content_type='application/pdf')
+                response['Content-Disposition'] = 'inline; filename="barcodes.pdf"'
                 return response
+
             except Exception as e:
                 return HttpResponse(f"Erro ao gerar o código de barras: {e}")
         else:
