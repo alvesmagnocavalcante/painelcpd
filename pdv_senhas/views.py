@@ -5,7 +5,7 @@ from django.core.cache import cache
 def calculate_password(pdv_number):
     today = datetime.now()
     # Garantir que dia e mês sempre tenham dois dígitos
-    day_month = int(f"{today.day:02d}{today.month:02d}")
+    day_month = int(f"{today.day}{today.month}")
     password_number = day_month + pdv_number
     password = f"pdv@{password_number}"
     return password
