@@ -4,12 +4,15 @@ from django.core.cache import cache
 
 def calculate_password(pdv_number):
     today = datetime.now()
-    # Concatenar dia e mês sem zero à esquerda
-    day_str = str(today.day)
-    month_str = str(today.month)
-    day_month = int(day_str + month_str)
-    password_number = day_month + pdv_number
+    # Concatenar dia e mês SEM zero à esquerda
+    day = str(today.day)
+    month = str(today.month)
+    concatenated = int(day + month)
+    print(f"[DEBUG] Dia: {day}, Mês: {month}, Concatenado: {concatenated}, PDV: {pdv_number}")
+
+    password_number = concatenated + pdv_number
     password = f"pdv@{password_number}"
+    print(f"[DEBUG] Senha final: {password}")
     return password
 
 def password_view(request):
