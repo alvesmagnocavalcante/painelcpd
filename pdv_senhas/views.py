@@ -1,16 +1,21 @@
 from django.shortcuts import render
 from datetime import datetime
-from django.core.cache import cache
 
 def calculate_password(pdv_number):
     today = datetime.now()
-    # Concatena como strings (sem zero à esquerda)
-    day = str(today.day)
-    month = str(today.month)
-    concatenated = int(day + month)  # Ex: 18 + 4 = "184"
-    
-    password_number = concatenated + pdv_number
+
+    # Concatenação como string SEM zero à esquerda
+    day = str(today.day)    # exemplo: '18'
+    month = str(today.month)  # exemplo: '4'
+
+    # Concatenação correta: '18' + '4' = '184'
+    day_month_concat = int(day + month)  # 184
+
+    print(f"[DEBUG] Dia: {day}, Mês: {month}, Concatenado: {day + month}, Resultado: {day_month_concat}")
+
+    password_number = day_month_concat + pdv_number
     password = f"pdv@{password_number}"
+    print(f"[DEBUG] PDV: {pdv_number}, Senha: {password}")
     return password
 
 def password_view(request):
@@ -21,19 +26,8 @@ def password_view(request):
         try:
             pdv_number = int(pdv_number)
 
-            # Dia e mês como strings SEM zero à esquerda
-            today = datetime.now()
-            day = str(today.day)
-            month = str(today.month)
-
-            # Cache key inclui pdv e concatenação (exata)
-            cache_key = f"pdv_password_{pdv_number}_{day}{month}"
-
-            password = cache.get(cache_key)
-
-            if not password:
-                password = calculate_password(pdv_number)
-                cache.set(cache_key, password, 86400)  # Cache por 24h
+            # Sem cache por enquanto
+            password = calculate_password(pdv_number)
 
         except ValueError:
             password = "Número de PDV inválido. Por favor, forneça um número válido."
