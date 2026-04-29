@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
 CSRF_TRUSTED_ORIGINS = [
     'https://painelcpd.onrender.com',
+    'https://cpd2-plv5lnfp.b4a.run'
 ]
 
 MIDDLEWARE = [
